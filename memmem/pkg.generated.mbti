@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/memmem"
+
+// Values
+pub fn contains(FixedArray[Byte], FixedArray[Byte]) -> Bool
+
+pub fn count(FixedArray[Byte], FixedArray[Byte]) -> Int
+
+pub fn find(FixedArray[Byte], FixedArray[Byte], from? : Int) -> Int?
+
+pub fn find_last(FixedArray[Byte], FixedArray[Byte]) -> Int?
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -13,68 +13,69 @@
 // limitations under the License.
 
 ///|
-fn json_bench_payload(n : Int) -> String {
-  let out = StringBuilder(size_hint=n * 72)
-  out.write_string("[")
-  for index in 0..<n {
-    if index > 0 {
-      out.write_string(",")
+/// Roughly 64 KiB of realistic JSON: an array of repeated objects.
+fn bench_doc() -> FixedArray[Byte] {
+  let item = b"{\"id\": 123456, \"name\": \"item \\\"123\\\"\", \"price\": -1.25e3, \"active\": true, \"tags\": [\"alpha\", \"beta\"], \"note\": null}"
+  let count = 65536 / (item.length() + 1)
+  let total = 1 + count * (item.length() + 1)
+  let bytes : FixedArray[Byte] = FixedArray::make(total, b',')
+  bytes[0] = b'['
+  let mut pos = 1
+  for _ in 0..<count {
+    for j in 0..<item.length() {
+      bytes[pos + j] = item[j]
     }
-    out.write_string("{\"id\":")
-    out.write_object(index)
-    out.write_string(",\"active\":")
-    out.write_string(if index % 3 == 0 { "true" } else { "false" })
-    out.write_string(",\"name\":\"item-")
-    out.write_object(index)
-    out.write_string("\",\"values\":[")
-    out.write_object(index)
-    out.write_string(",")
-    out.write_object(index + 1)
-    out.write_string(",")
-    out.write_object(index + 2)
-    out.write_string("]}")
+    pos = pos + item.length() + 1
   }
-  out.write_string("]")
-  out.to_string()
+  bytes[total - 1] = b']'
+  bytes
 }
 
 ///|
-fn json_bench_payload_bytes(n : Int) -> Bytes {
-  @utf8.encode(json_bench_payload(n)[:])
+test "bench structural_indices simd 64k" (it : @bench.T) {
+  let doc = bench_doc()
+  it.bench(fn() { it.keep(@json.structural_indices(doc)) })
 }
 
 ///|
-test "bench fast.json parse_bytes records=128" (it : @bench.T) {
-  let input = json_bench_payload_bytes(128)
+test "bench structural_indices scalar 64k" (it : @bench.T) {
+  let doc = bench_doc()
+  it.bench(fn() { it.keep(reference(doc)) })
+}
+
+///|
+fn bench_doc_string() -> String {
+  let doc = bench_doc()
+  let buf = StringBuilder::new()
+  for i in 0..<doc.length() {
+    buf.write_char(doc[i].to_int().unsafe_to_char())
+  }
+  buf.to_string()
+}
+
+///|
+test "bench parse fast 64k" (it : @bench.T) {
+  let doc = bench_doc()
+  it.bench(fn() { it.keep(try! @json.parse(doc)) })
+}
+
+///|
+test "bench parse core 64k" (it : @bench.T) {
+  let doc = bench_doc_string()
+  it.bench(fn() { it.keep(try! @corejson.parse(doc)) })
+}
+
+///|
+/// End-to-end comparison when the document arrives as UTF-8 bytes: core
+/// needs the bytes decoded into a UTF-16 String first (ASCII-only decode
+/// here, which flatters it), while @json.parse consumes bytes directly.
+test "bench parse core from bytes 64k" (it : @bench.T) {
+  let doc = bench_doc()
   it.bench(fn() {
-    let value = try! @json.parse_bytes(input[:])
-    it.keep(value)
-  })
-}
-
-///|
-test "bench core.json parse records=128" (it : @bench.T) {
-  let input = json_bench_payload(128)
-  it.bench(fn() {
-    let value = try! @core_json.parse(input[:])
-    it.keep(value)
-  })
-}
-
-///|
-test "bench fast.json parse_bytes records=1024" (it : @bench.T) {
-  let input = json_bench_payload_bytes(1024)
-  it.bench(fn() {
-    let value = try! @json.parse_bytes(input[:])
-    it.keep(value)
-  })
-}
-
-///|
-test "bench core.json parse records=1024" (it : @bench.T) {
-  let input = json_bench_payload(1024)
-  it.bench(fn() {
-    let value = try! @core_json.parse(input[:])
-    it.keep(value)
+    let buf = StringBuilder::new()
+    for i in 0..<doc.length() {
+      buf.write_char(doc[i].to_int().unsafe_to_char())
+    }
+    it.keep(try! @corejson.parse(buf.to_string()))
   })
 }

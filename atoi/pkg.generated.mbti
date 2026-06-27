@@ -1,0 +1,16 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/atoi"
+
+// Values
+pub fn parse_int64(FixedArray[Byte]) -> Int64?
+
+pub fn parse_uint64(FixedArray[Byte]) -> UInt64?
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

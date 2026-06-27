@@ -1,0 +1,16 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/csv"
+
+// Values
+pub fn split_records(FixedArray[Byte], delimiter? : Byte) -> Array[Array[(Int, Int)]]?
+
+pub fn unquoted_positions(FixedArray[Byte], delimiter? : Byte) -> Array[Int]?
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -1,7 +1,10 @@
 # `Yu-zh/fast/quicksort`
 
-This package provides opt-in quicksort entry points that use
-`moonbitlang/core/v128` for 32-bit integer partitioning.
+This package provides opt-in quicksort entry points (`sort_int`, `sort_uint`)
+that sort a `MutArrayView` in place using `moonbitlang/core/v128` for 32-bit
+integer partitioning — four lanes are compared against the pivot per step. The
+sort is unstable: small partitions fall back to insertion sort and repeatedly
+imbalanced partitions fall back to heapsort (introsort-style).
 
 The v128 partitioning experiment is based on the SIMD quicksort approach
 described in [Engineering Faster Sorters for Small Sets of Items](https://arxiv.org/pdf/2205.05982).

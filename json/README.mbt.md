@@ -1,41 +1,32 @@
 # `Yu-zh/fast/json`
 
-This package is a MoonBit experiment inspired by
-[simdjson](https://github.com/simdjson/simdjson). It mirrors the broad
-two-stage shape: stage 1 scans structural and pseudo-structural JSON tokens
-outside strings, then stage 2 parses from that token index into MoonBit's
-built-in `Json` value.
+This package mirrors the `moonbitlang/core/fast/json` experiment, working over
+`FixedArray[Byte]` rather than a UTF-16 string.
 
-This is not a full simdjson port. It does not implement the C++ On-Demand API,
-runtime CPU dispatch, document streams, or fully vectorized structural scanning
-yet. The parser core is byte-oriented over UTF-8 `BytesView`; `String` APIs are
-convenience wrappers. On native/wasm linear-memory targets, stage 1 uses
-`v128_load` from the backing bytes for string scanning and structural/whitespace
-runs.
+- `parse` validates UTF-8, runs a simdjson-style structural-index pass (stage
+  1), then descends into MoonBit's built-in `Json` value (stage 2).
+- `structural_indices` exposes that stage-1 scan directly: the byte offsets a
+  parser must visit (structural characters, string-opening quotes, and the
+  first byte of each scalar), all outside string contents.
+- `minify` drops insignificant whitespace, reusing the stage-1 in-string mask
+  so whitespace inside strings is preserved.
+- `escape_string` is the serialization side: it escapes `"`, `\`, and control
+  characters, SIMD-scanning for bytes that need escaping and copying the rest
+  verbatim.
 
 ```mbt check
 ///|
 test "parse JSON bytes" {
-  let input : Bytes = b"{ \"a\" : [1, true, null] }"
-  let value = @json.parse_bytes(input[:])
-  inspect(value.stringify(), content="{\"a\":[1,true,null]}")
+  let input : FixedArray[Byte] = [b'[', b'1', b',', b'2', b']']
+  let value = @json.parse(input)
+  inspect(value.stringify(), content="[1,2]")
 }
 ```
 
 ```mbt check
 ///|
-test "parse JSON string" {
-  let value = @json.parse("{ \"a\" : [1, true, null] }")
-  inspect(value.stringify(), content="{\"a\":[1,true,null]}")
-}
-```
-
-```mbt check
-///|
-test "minify JSON" {
-  inspect(
-    @json.minify("{ \"message\" : \"hello, json\" }"),
-    content="{\"message\":\"hello, json\"}",
-  )
+test "minify drops insignificant whitespace" {
+  let input : FixedArray[Byte] = [b'[', b'1', b',', b' ', b'2', b']']
+  @test.assert_eq(@json.minify(input), Some([b'[', b'1', b',', b'2', b']']))
 }
 ```

@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/memchr"
+
+// Values
+pub fn count_byte(FixedArray[Byte], Byte) -> Int
+
+pub fn find_byte(FixedArray[Byte], Byte, from? : Int) -> Int?
+
+pub fn find_last_byte(FixedArray[Byte], Byte) -> Int?
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

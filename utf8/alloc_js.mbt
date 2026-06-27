@@ -13,17 +13,8 @@
 // limitations under the License.
 
 ///|
-test "stage1 emits structural and pseudo-structural tokens" {
-  let input : Bytes = b"{\"a\":[1,2],\"b\":\"{,}\"}"
-  let tokens = token_indexes(input[:])
-  @test.assert_eq(tokens.map(item => item.pos), [
-    0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 20,
-  ])
-  @test.assert_eq(tokens.map(item => item.end), [
-    1, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 20, 21,
-  ])
-  assert_true(tokens[0].kind is ObjectStart)
-  assert_true(tokens[1].kind is StringToken)
-  assert_true(tokens[4].kind is NumberToken)
-  assert_true(tokens[11].kind is StringToken)
+/// On js the uninitialized-array identity cast is not available; fall back
+/// to a zero-filled allocation.
+fn uninit_bytes(size : Int) -> FixedArray[Byte] {
+  FixedArray::make(size, 0)
 }
