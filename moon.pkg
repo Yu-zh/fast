@@ -1,0 +1,10 @@
+import {
+  "moonbitlang/core/builtin",
+}
+
+import {
+  "moonbitlang/core/test",
+  "Yu-zh/fast/quicksort",
+} for "test"
+
+warnings = "-alert_experimental"

@@ -1,0 +1,16 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/quicksort"
+
+// Values
+pub fn sort_int(MutArrayView[Int]) -> Unit
+
+pub fn sort_uint(MutArrayView[UInt]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

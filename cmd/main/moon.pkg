@@ -1,0 +1,7 @@
+// import {
+//   "Yu-zh/fast" @lib,
+// }
+
+options(
+  "is-main": true,
+)
