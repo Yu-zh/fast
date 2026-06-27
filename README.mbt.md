@@ -6,6 +6,11 @@ use `moonbitlang/core/v128` for 32-bit integer partitioning.
 The v128 partitioning experiment is based on the SIMD quicksort approach
 described in [Engineering Faster Sorters for Small Sets of Items](https://arxiv.org/pdf/2205.05982).
 
+The `Yu-zh/fast/json` package is an experiment inspired by
+[simdjson](https://github.com/simdjson/simdjson). It provides structural and
+pseudo-structural token indexing, JSON validation, minification, and indexed
+parsing into MoonBit's built-in `Json` value.
+
 ```mbt check
 ///|
 test "sort Int values" {

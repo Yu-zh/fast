@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/json"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn minify(String) -> String raise ParseError
+
+pub fn minify_bytes(BytesView) -> String raise ParseError
+
+pub fn parse(String) -> Json raise ParseError
+
+pub fn parse_bytes(BytesView) -> Json raise ParseError
+
+pub fn parse_bytes_with_limit(BytesView, max_nesting_depth~ : Int) -> Json raise ParseError
+
+pub fn parse_with_limit(String, max_nesting_depth~ : Int) -> Json raise ParseError
+
+pub fn validate(String) -> Bool
+
+pub fn validate_bytes(BytesView) -> Bool
+
+// Errors
+pub(all) suberror ParseError {
+  UnexpectedEof(pos~ : Int)
+  UnexpectedChar(pos~ : Int, expected~ : String, found~ : Byte)
+  InvalidString(pos~ : Int, message~ : String)
+  InvalidNumber(pos~ : Int, lexeme~ : String)
+  TrailingContent(pos~ : Int)
+  NestingTooDeep(pos~ : Int, limit~ : Int)
+} derive(Eq, ToJson, @debug.Debug)
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+
