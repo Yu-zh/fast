@@ -1,0 +1,10 @@
+import {
+  "moonbitlang/core/builtin",
+  "Yu-zh/fast/ipv4",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
+
+warnings = "-missing_doc-alert_experimental"

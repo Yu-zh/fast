@@ -1,0 +1,27 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/cidr"
+
+// Values
+pub fn parse(FixedArray[Byte]) -> Cidr?
+
+// Errors
+
+// Types and methods
+pub struct Allowlist {
+  entries : Array[Cidr]
+}
+pub fn Allowlist::allows(Self, UInt) -> Bool
+pub fn Allowlist::allows_bytes(Self, FixedArray[Byte]) -> Bool
+pub fn Allowlist::of(Array[FixedArray[Byte]]) -> Self?
+
+pub struct Cidr {
+  base : UInt
+  prefix : Int
+}
+pub fn Cidr::contains(Self, UInt) -> Bool
+pub fn Cidr::contains_bytes(Self, FixedArray[Byte]) -> Bool
+
+// Type aliases
+
+// Traits
+

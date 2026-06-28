@@ -1,4 +1,7 @@
 members = [
   ".",
   "./application/infer",
+  "./application/bloom",
+  "./application/cidr",
+  "./application/http",
 ]

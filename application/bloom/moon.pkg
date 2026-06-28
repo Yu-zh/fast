@@ -1,0 +1,11 @@
+import {
+  "moonbitlang/core/builtin",
+  "Yu-zh/fast/adler32",
+  "Yu-zh/fast/crc32",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
+
+warnings = "-missing_doc-alert_experimental"

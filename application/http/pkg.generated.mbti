@@ -1,0 +1,21 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/http"
+
+// Values
+pub fn parse(FixedArray[Byte]) -> Request?
+
+// Errors
+
+// Types and methods
+pub struct Request {
+  verb : FixedArray[Byte]
+  path : FixedArray[Byte]
+  version : FixedArray[Byte]
+  headers : Array[(FixedArray[Byte], FixedArray[Byte])]
+}
+pub fn Request::header(Self, FixedArray[Byte]) -> FixedArray[Byte]?
+
+// Type aliases
+
+// Traits
+

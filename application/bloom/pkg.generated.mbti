@@ -1,0 +1,21 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/bloom"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct Bloom {
+  bits : FixedArray[Byte]
+  m : Int
+  k : Int
+}
+pub fn Bloom::add(Self, FixedArray[Byte]) -> Unit
+pub fn Bloom::contains(Self, FixedArray[Byte]) -> Bool
+pub fn Bloom::new(Int, Int) -> Self
+
+// Type aliases
+
+// Traits
+
