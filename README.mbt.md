@@ -31,13 +31,14 @@ with a runnable example.
 - `itoa` — decimal integer formatting (`format_uint64`, `format_int64`).
 - `ipv4` — IPv4 dotted-quad `parse` / `format`.
 
-### Numeric arrays
+### Numeric
 
 - `quicksort` — opt-in v128 quicksort for `Int` / `UInt`, based on
   [Engineering Faster Sorters for Small Sets of Items](https://arxiv.org/pdf/2205.05982).
-- `reduce` — reductions (`sum`/`min`/`max`/`is_sorted`) over `Int` / `Double`.
-- `vecmath` — `dot`, `axpy`, `scale`, `argmin`, `argmax` over `Double`.
-- `prefix_sum` — inclusive scan (Hillis-Steele) over `Int`.
+
+(Element-wise numeric kernels like reductions and prefix-sum are intentionally
+*not* here — see "Backends & benchmarking" for why v128 can't beat a scalar
+loop over `FixedArray[Int]` / `[Float]`.)
 
 ### Checksums & hashing
 
@@ -69,14 +70,6 @@ workload:
 test "base64 round-trips arbitrary bytes" {
   let data : FixedArray[Byte] = [b'f', b'o', b'o', b'b', b'a', b'r']
   @test.assert_eq(@base64.decode(@base64.encode(data)), Some(data))
-}
-```
-
-```mbt check
-///|
-test "reduce over numeric arrays" {
-  @test.assert_eq(@reduce.sum_int([1, 2, 3, 4, 5]), 15)
-  @test.assert_eq(@reduce.max_int([5, -1, 3, 9, 0]), Some(9))
 }
 ```
 
@@ -120,12 +113,13 @@ Measured SIMD-vs-scalar speedups (`moon bench --target native`, ~64 KiB inputs):
 **Every win comes from a byte-oriented kernel** — they use a true vector load
 (`v128_load` over `FixedArray[Byte]`).
 
-The **numeric packages over typed arrays do *not* benefit**: MoonBit has no
-vector load for `FixedArray[Int]` / `[Float]`, so they gather lanes one at a
-time with `*_const`, whose overhead outweighs the vector op. Measured,
-`reduce.sum_int` / `max_int` are ~5× *slower* than scalar and
-`prefix_sum.scan_int` ~2× slower; `vecmath.dot` only ~1.3×. They are correct,
-but a plain scalar loop is faster until a typed vector load exists.
+**Why there are no element-wise numeric kernels here.** MoonBit has no vector
+load for `FixedArray[Int]` / `[Float]`, so a "SIMD" version must gather lanes
+one at a time with `*_const`, whose overhead outweighs the vector op. Earlier
+reduction and prefix-sum packages measured ~2–5× *slower* than a plain scalar
+loop, so they were dropped — every kernel here genuinely beats scalar. The lone
+numeric package, `quicksort`, wins on algorithm (≈6× faster than the stdlib
+sort), not on lane-wise SIMD.
 
 Tests run on either backend (`moon test`, or `moon test --target native`).
 

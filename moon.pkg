@@ -6,7 +6,6 @@ import {
   "moonbitlang/core/test",
   "Yu-zh/fast/base64",
   "Yu-zh/fast/quicksort",
-  "Yu-zh/fast/reduce",
 } for "test"
 
 warnings = "-alert_experimental"
