@@ -91,16 +91,41 @@ test "sort Int values" {
 
 ## Backends & benchmarking
 
-The v128 intrinsics lower to real SIMD instructions on the **native** backend
-(SSE / NEON), where these kernels run several times faster than scalar code —
-for example, on a 64 KiB workload, base64 encode ~6×, hex decode ~8×, and
-substring search ~18×. On the **wasm-gc** backend (this module's
-`preferred_target`) v128 currently runs through a scalar fallback, so the SIMD
-paths are not faster there. Benchmark on native:
+v128 lowers to real SIMD on the **native** backend. Benchmark/run with
+`--release --target native` — a debug build is ~100× slower, and the `wasm-gc`
+backend currently runs v128 through a scalar fallback.
 
 ```bash
 moon bench --target native
 ```
+
+Measured SIMD-vs-scalar speedups (`moon bench --target native`, ~64 KiB inputs):
+
+| package | kernel | speedup |
+|---|---|---|
+| `adler32` | `checksum` | ~35× |
+| `charset` | `validate` | ~32× |
+| `hex` | `encode` | ~21× |
+| `memmem` | `find` | ~20× |
+| `utf8` | `validate` | ~12× |
+| `ascii` | `skip_whitespace`, `all_ascii` | ~10× |
+| `memchr` | `find_byte` | ~9× |
+| `hex` / `base64` | `decode` | ~6–8× |
+| `base64` | `encode` | ~6× |
+| `json` | `structural_indices` | ~5× |
+| `image` | `grayscale_rgba` | ~5× |
+| `gemm` | `gemm_i8` | ~4× |
+| `csv` | `unquoted_positions` | ~3.5× |
+
+**Every win comes from a byte-oriented kernel** — they use a true vector load
+(`v128_load` over `FixedArray[Byte]`).
+
+The **numeric packages over typed arrays do *not* benefit**: MoonBit has no
+vector load for `FixedArray[Int]` / `[Float]`, so they gather lanes one at a
+time with `*_const`, whose overhead outweighs the vector op. Measured,
+`reduce.sum_int` / `max_int` are ~5× *slower* than scalar and
+`prefix_sum.scan_int` ~2× slower; `vecmath.dot` only ~1.3×. They are correct,
+but a plain scalar loop is faster until a typed vector load exists.
 
 Tests run on either backend (`moon test`, or `moon test --target native`).
 
