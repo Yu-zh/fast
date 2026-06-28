@@ -40,17 +40,27 @@ Sample output (greedy, `temperature 0`):
   llama2.c `.bin` format.
 - **Tokenizer** (`tokenizer.mbt`): `Tokenizer::from_bytes` + SentencePiece-style
   BPE `encode` / `decode`.
+- **INT8 quantization** (`quant.mbt`): `QTransformer` quantizes the matmul
+  weights to int8 on load (group size 16). The quantized matmul reads int8
+  (4x less memory) and uses real SIMD — `v128_load` + `i32x4_dot_i16x8_s`,
+  since int8, unlike a typed float array, has a vector load. This is the path
+  `cmd/main` uses.
 - **CLI** (`cmd/main`): reads the files (`moonbitlang/x/fs`), encodes, generates,
   and prints.
 
 ## Status & caveats
 
-With `--release` on native, `stories15M` runs at roughly **95 tokens/sec**
-(256 tokens in ~2.7s). A **debug build is ~100x slower**, so always pass
-`--release`. The matmul is single-threaded and, lacking a typed-array vector
-load, its `f32x4` gather performs about the same as scalar; the biggest levers
-from here are multi-threading and reduced memory traffic via int8/4-bit
-quantization (which also unlocks larger models).
+Always pass `--release` on native — a debug build is ~100x slower. With that,
+on `stories15M`:
+
+| build | 256 tokens (generation) | notes |
+|------|------|------|
+| f32 (`Transformer`)  | ~2.5s | full precision |
+| **int8 (`QTransformer`, default)** | **~1.1s (~2.3x faster)** | ~4x less weight memory; output still fluent |
+
+The matmul is still single-threaded; the remaining levers are multi-threading
+and 4-bit quantization (which also makes 1B-class models feasible). The f32
+`Transformer` remains for reference and is what the f64 cross-check tests use.
 
 ```mbt check
 ///|

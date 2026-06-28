@@ -120,7 +120,8 @@ fn main {
   }
   let (config, weights) = @infer.load_checkpoint(cp_bytes)
   let tokenizer = @infer.Tokenizer::from_bytes(tok_bytes, config.vocab_size)
-  let model = @infer.Transformer::new(config, weights)
+  // quantize weights to int8 on load (~4x less memory traffic in the matmuls)
+  let model = @infer.QTransformer::new(config, weights)
   let prompt_tokens = tokenizer.encode(prompt, true, false)
   if prompt_tokens.length() == 0 {
     println("(empty prompt produced no tokens)")

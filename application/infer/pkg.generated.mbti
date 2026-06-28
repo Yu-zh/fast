@@ -10,6 +10,10 @@ pub fn load_checkpoint(Bytes) -> (Config, Weights)
 
 pub fn matmul(FixedArray[Float], FixedArray[Float], FixedArray[Float], Int, Int) -> Unit
 
+pub fn qmatmul(FixedArray[Float], FixedArray[Byte], FixedArray[Float], QTensor, Int, Int) -> Unit
+
+pub fn quantize_matrix(FixedArray[Float], Int) -> QTensor
+
 pub fn rmsnorm(FixedArray[Float], FixedArray[Float], FixedArray[Float], Int) -> Unit
 
 pub fn rope(FixedArray[Float], FixedArray[Float], Int, Int, Int, Int) -> Unit
@@ -31,6 +35,36 @@ pub(all) struct Config {
   n_kv_heads : Int
   vocab_size : Int
   seq_len : Int
+}
+
+pub(all) struct QTensor {
+  q : FixedArray[Byte]
+  scales : FixedArray[Float]
+}
+
+pub(all) struct QTransformer {
+  config : Config
+  weights : QWeights
+  state : RunState
+  xq : FixedArray[Byte]
+  xs : FixedArray[Float]
+}
+pub fn QTransformer::forward(Self, Int, Int) -> FixedArray[Float]
+pub fn QTransformer::new(Config, Weights) -> Self
+
+pub(all) struct QWeights {
+  token_embedding : FixedArray[Float]
+  rms_att : Array[FixedArray[Float]]
+  wq : Array[QTensor]
+  wk : Array[QTensor]
+  wv : Array[QTensor]
+  wo : Array[QTensor]
+  rms_ffn : Array[FixedArray[Float]]
+  w1 : Array[QTensor]
+  w2 : Array[QTensor]
+  w3 : Array[QTensor]
+  rms_final : FixedArray[Float]
+  wcls : QTensor
 }
 
 pub(all) struct Rng {
