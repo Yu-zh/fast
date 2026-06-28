@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/image"
+
+// Values
+pub fn adjust_brightness(FixedArray[Byte], Int) -> Unit
+
+pub fn grayscale_rgba(FixedArray[Byte]) -> FixedArray[Byte]
+
+pub fn invert(FixedArray[Byte]) -> Unit
+
+pub fn threshold(FixedArray[Byte], Byte) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

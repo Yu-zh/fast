@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/gemm"
+
+// Values
+pub fn argmax_i32(FixedArray[Int]) -> Int?
+
+pub fn gemm_i8(FixedArray[Byte], FixedArray[Byte], Int, Int, Int) -> FixedArray[Int]
+
+pub fn relu_i32(FixedArray[Int]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

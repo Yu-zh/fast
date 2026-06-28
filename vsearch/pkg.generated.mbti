@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/vsearch"
+
+// Values
+pub fn cosine(FixedArray[Float], FixedArray[Float]) -> Float
+
+pub fn dot(FixedArray[Float], FixedArray[Float]) -> Float
+
+pub fn hamming(FixedArray[Byte], FixedArray[Byte]) -> Int
+
+pub fn l2_squared(FixedArray[Float], FixedArray[Float]) -> Float
+
+pub fn top_k_cosine(FixedArray[Float], Array[FixedArray[Float]], Int) -> Array[(Int, Float)]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -48,6 +48,20 @@ with a runnable example.
 - `histogram` — byte-frequency `counts` (scalar; scatter not in v128) and a
   SIMD `count_of`.
 
+### Applications
+
+Larger packages that compose the kernels above into something closer to a real
+workload:
+
+- `vsearch` — vector similarity search: f32 `dot` / `l2_squared` / `cosine`,
+  binary `hamming`, and a brute-force `top_k_cosine` (the distance core under
+  semantic search / RAG).
+- `image` — per-pixel image filters: `invert`, `adjust_brightness`,
+  `threshold`, and RGBA `grayscale_rgba`.
+- `gemm` — INT8 matrix multiply (`gemm_i8`) plus `relu_i32` / `argmax_i32`,
+  enough to run a quantized MLP forward pass (a kernel + layer ops, not yet a
+  full inference runtime).
+
 ## Examples
 
 ```mbt check
