@@ -132,5 +132,21 @@ library above; application modules that build on it live under `application/`:
 - [`application/infer`](application/infer) — `Yu-zh/infer`, a Llama-architecture
   inference runtime that depends on `Yu-zh/fast`. It loads real
   [llama2.c](https://github.com/karpathy/llama2.c) checkpoints (SIMD transformer
-  kernels, forward pass with KV cache, BPE tokenizer, sampling) and has a CLI
-  that generates text — see its README.
+  kernels, forward pass with KV cache, BPE tokenizer, sampling, int8
+  quantization) and has a CLI that generates text — see its README.
+- [`application/search`](application/search) — `Yu-zh/search`, a grep-like
+  literal search (`memmem` + `memchr`) reporting matching lines with numbers.
+- [`application/dedup`](application/dedup) — `Yu-zh/dedup`, content-defined
+  chunking + deduplication (rolling hash boundaries, `adler32`/`sha256` chunks).
+- [`application/jq`](application/jq) — `Yu-zh/jq`, an NDJSON query tool
+  (`memchr`/`memmem` + SIMD `json.minify`).
+- [`application/csvq`](application/csvq) — `Yu-zh/csvq`, CSV analytics
+  (`csv.split_records` + `atoi` aggregations).
+- [`application/vision`](application/vision) — `Yu-zh/vision`, an int8 quantized
+  MLP image classifier (`gemm_i8`).
+- [`application/http`](application/http) — `Yu-zh/http`, an HTTP/1.x request
+  parser (`memchr` scanning, case-insensitive headers via `ascii`).
+- [`application/cidr`](application/cidr) — `Yu-zh/cidr`, IPv4 CIDR / allowlist
+  matching (SIMD `ipv4.parse` + masked compare).
+- [`application/bloom`](application/bloom) — `Yu-zh/bloom`, a Bloom filter hashed
+  with SIMD `adler32`/`crc32`.
