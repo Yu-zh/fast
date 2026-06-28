@@ -6,11 +6,15 @@ pub fn classify(FixedArray[Byte], FixedArray[Byte], Int, Int) -> Int
 
 pub fn generate(Transformer, Array[Int], Int) -> Array[Int]
 
+pub fn load_checkpoint(Bytes) -> (Config, Weights)
+
 pub fn matmul(FixedArray[Float], FixedArray[Float], FixedArray[Float], Int, Int) -> Unit
 
 pub fn rmsnorm(FixedArray[Float], FixedArray[Float], FixedArray[Float], Int) -> Unit
 
 pub fn rope(FixedArray[Float], FixedArray[Float], Int, Int, Int, Int) -> Unit
+
+pub fn sample(FixedArray[Float], Float, Float, Rng) -> Int
 
 pub fn softmax(FixedArray[Float], Int, Int) -> Unit
 
@@ -29,6 +33,12 @@ pub(all) struct Config {
   seq_len : Int
 }
 
+pub(all) struct Rng {
+  mut state : UInt
+}
+pub fn Rng::new(UInt) -> Self
+pub fn Rng::next_float(Self) -> Float
+
 pub(all) struct RunState {
   x : FixedArray[Float]
   xb : FixedArray[Float]
@@ -43,6 +53,15 @@ pub(all) struct RunState {
   key_cache : FixedArray[Float]
   value_cache : FixedArray[Float]
 }
+
+pub(all) struct Tokenizer {
+  vocab : Array[Bytes]
+  scores : Array[Float]
+  lookup : Map[Bytes, Int]
+}
+pub fn Tokenizer::decode(Self, Int, Int) -> Bytes
+pub fn Tokenizer::encode(Self, String, Bool, Bool) -> Array[Int]
+pub fn Tokenizer::from_bytes(Bytes, Int) -> Self
 
 pub(all) struct Transformer {
   config : Config

@@ -1,0 +1,9 @@
+import {
+  "moonbitlang/core/env",
+  "moonbitlang/x/fs",
+  "Yu-zh/infer",
+}
+
+options(
+  "is-main": true,
+)

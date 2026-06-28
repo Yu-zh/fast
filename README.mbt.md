@@ -110,5 +110,7 @@ This repo is a `moon` workspace. The root module is the `Yu-zh/fast` kernel
 library above; application modules that build on it live under `application/`:
 
 - [`application/infer`](application/infer) — `Yu-zh/infer`, a Llama-architecture
-  inference runtime (SIMD transformer kernels, forward pass with KV cache, and
-  greedy generation) that depends on `Yu-zh/fast`.
+  inference runtime that depends on `Yu-zh/fast`. It loads real
+  [llama2.c](https://github.com/karpathy/llama2.c) checkpoints (SIMD transformer
+  kernels, forward pass with KV cache, BPE tokenizer, sampling) and has a CLI
+  that generates text — see its README.

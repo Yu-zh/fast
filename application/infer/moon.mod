@@ -16,4 +16,5 @@ description = "SIMD-accelerated inference runtime built on Yu-zh/fast"
 
 import {
   "Yu-zh/fast@0.1.0",
+  "moonbitlang/x@0.4.46",
 }
