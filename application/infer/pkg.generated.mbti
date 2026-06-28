@@ -4,9 +4,68 @@ package "Yu-zh/infer"
 // Values
 pub fn classify(FixedArray[Byte], FixedArray[Byte], Int, Int) -> Int
 
+pub fn generate(Transformer, Array[Int], Int) -> Array[Int]
+
+pub fn matmul(FixedArray[Float], FixedArray[Float], FixedArray[Float], Int, Int) -> Unit
+
+pub fn rmsnorm(FixedArray[Float], FixedArray[Float], FixedArray[Float], Int) -> Unit
+
+pub fn rope(FixedArray[Float], FixedArray[Float], Int, Int, Int, Int) -> Unit
+
+pub fn softmax(FixedArray[Float], Int, Int) -> Unit
+
+pub fn swiglu(FixedArray[Float], FixedArray[Float], Int) -> Unit
+
 // Errors
 
 // Types and methods
+pub(all) struct Config {
+  dim : Int
+  hidden_dim : Int
+  n_layers : Int
+  n_heads : Int
+  n_kv_heads : Int
+  vocab_size : Int
+  seq_len : Int
+}
+
+pub(all) struct RunState {
+  x : FixedArray[Float]
+  xb : FixedArray[Float]
+  xb2 : FixedArray[Float]
+  hb : FixedArray[Float]
+  hb2 : FixedArray[Float]
+  q : FixedArray[Float]
+  k : FixedArray[Float]
+  v : FixedArray[Float]
+  att : FixedArray[Float]
+  logits : FixedArray[Float]
+  key_cache : FixedArray[Float]
+  value_cache : FixedArray[Float]
+}
+
+pub(all) struct Transformer {
+  config : Config
+  weights : Weights
+  state : RunState
+}
+pub fn Transformer::forward(Self, Int, Int) -> FixedArray[Float]
+pub fn Transformer::new(Config, Weights) -> Self
+
+pub(all) struct Weights {
+  token_embedding : FixedArray[Float]
+  rms_att : Array[FixedArray[Float]]
+  wq : Array[FixedArray[Float]]
+  wk : Array[FixedArray[Float]]
+  wv : Array[FixedArray[Float]]
+  wo : Array[FixedArray[Float]]
+  rms_ffn : Array[FixedArray[Float]]
+  w1 : Array[FixedArray[Float]]
+  w2 : Array[FixedArray[Float]]
+  w3 : Array[FixedArray[Float]]
+  rms_final : FixedArray[Float]
+  wcls : FixedArray[Float]
+}
 
 // Type aliases
 

@@ -103,3 +103,12 @@ moon bench --target native
 ```
 
 Tests run on either backend (`moon test`, or `moon test --target native`).
+
+## Workspace
+
+This repo is a `moon` workspace. The root module is the `Yu-zh/fast` kernel
+library above; application modules that build on it live under `application/`:
+
+- [`application/infer`](application/infer) — `Yu-zh/infer`, a Llama-architecture
+  inference runtime (SIMD transformer kernels, forward pass with KV cache, and
+  greedy generation) that depends on `Yu-zh/fast`.

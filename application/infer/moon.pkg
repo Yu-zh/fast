@@ -1,9 +1,12 @@
 import {
   "moonbitlang/core/builtin",
+  "moonbitlang/core/math",
+  "moonbitlang/core/v128",
   "Yu-zh/fast/gemm",
 }
 
 import {
+  "moonbitlang/core/math",
   "moonbitlang/core/test",
 } for "test"
 
