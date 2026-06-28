@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/search"
+
+// Values
+pub fn count(FixedArray[Byte], FixedArray[Byte]) -> Int
+
+pub fn find_all(FixedArray[Byte], FixedArray[Byte]) -> Array[Int]
+
+pub fn search_lines(FixedArray[Byte], FixedArray[Byte]) -> Array[Match]
+
+// Errors
+
+// Types and methods
+pub struct Match {
+  line : Int
+  start : Int
+  end : Int
+}
+pub fn Match::text(Self, FixedArray[Byte]) -> FixedArray[Byte]
+
+// Type aliases
+
+// Traits
+

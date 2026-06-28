@@ -1,0 +1,23 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/dedup"
+
+// Values
+pub fn chunk(FixedArray[Byte], Int, UInt, Int) -> Array[(Int, Int)]
+
+pub fn dedup(FixedArray[Byte], Int, UInt, Int) -> Dedup
+
+pub fn digest(FixedArray[Byte], Int, Int) -> FixedArray[Byte]
+
+// Errors
+
+// Types and methods
+pub struct Dedup {
+  bounds : Array[(Int, Int)]
+  sequence : Array[Int]
+  unique_count : Int
+}
+
+// Type aliases
+
+// Traits
+

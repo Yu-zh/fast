@@ -1,0 +1,11 @@
+import {
+  "moonbitlang/core/builtin",
+  "Yu-zh/fast/memmem",
+  "Yu-zh/fast/memchr",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
+
+warnings = "-missing_doc-alert_experimental"

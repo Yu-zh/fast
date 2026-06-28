@@ -4,4 +4,8 @@ members = [
   "./application/bloom",
   "./application/cidr",
   "./application/http",
+  "./application/search",
+  "./application/dedup",
+  "./application/jq",
+  "./application/csvq",
 ]

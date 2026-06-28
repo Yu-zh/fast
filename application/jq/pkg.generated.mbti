@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/jq"
+
+// Values
+pub fn field(FixedArray[Byte], FixedArray[Byte]) -> FixedArray[Byte]?
+
+pub fn lines(FixedArray[Byte]) -> Array[(Int, Int)]
+
+pub fn minify(FixedArray[Byte]) -> FixedArray[Byte]?
+
+pub fn select_contains(FixedArray[Byte], FixedArray[Byte]) -> Array[FixedArray[Byte]]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

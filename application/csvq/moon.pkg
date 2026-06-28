@@ -1,0 +1,11 @@
+import {
+  "moonbitlang/core/builtin",
+  "Yu-zh/fast/csv",
+  "Yu-zh/fast/atoi",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
+
+warnings = "-missing_doc-alert_experimental"

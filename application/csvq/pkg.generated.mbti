@@ -1,0 +1,25 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/csvq"
+
+// Values
+pub fn parse(FixedArray[Byte]) -> Table?
+
+// Errors
+
+// Types and methods
+pub struct Table {
+  data : FixedArray[Byte]
+  rows : Array[Array[(Int, Int)]]
+}
+pub fn Table::cell(Self, Int, Int) -> FixedArray[Byte]
+pub fn Table::count_int(Self, Int) -> Int
+pub fn Table::max_int(Self, Int) -> Int64?
+pub fn Table::mean_int(Self, Int) -> Double?
+pub fn Table::min_int(Self, Int) -> Int64?
+pub fn Table::row_count(Self) -> Int
+pub fn Table::sum_int(Self, Int) -> Int64
+
+// Type aliases
+
+// Traits
+
