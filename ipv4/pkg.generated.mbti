@@ -1,0 +1,16 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/ipv4"
+
+// Values
+pub fn format(UInt) -> FixedArray[Byte]
+
+pub fn parse(FixedArray[Byte]) -> UInt?
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

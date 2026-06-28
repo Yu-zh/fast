@@ -293,3 +293,60 @@ pub fn decode(input : FixedArray[Byte]) -> FixedArray[Byte]? {
   }
   Some(out)
 }
+
+// --- url-safe variant (RFC 4648 §5) ---------------------------------------
+
+///|
+/// Translates the `n`-byte prefix of `src` into `dst`, mapping byte
+/// `a_from`->`a_to` and `b_from`->`b_to`, with everything else copied as-is.
+fn translate2(
+  src : FixedArray[Byte],
+  dst : FixedArray[Byte],
+  n : Int,
+  a_from : Byte,
+  a_to : Byte,
+  b_from : Byte,
+  b_to : Byte,
+) -> Unit {
+  let af = @v128.i8x16_splat(a_from)
+  let at = @v128.i8x16_splat(a_to)
+  let bf = @v128.i8x16_splat(b_from)
+  let bt = @v128.i8x16_splat(b_to)
+  let mut i = 0
+  while i + 16 <= n {
+    let v = @v128.v128_load(src, i)
+    let v = @v128.v128_bitselect(at, v, @v128.i8x16_eq(v, af))
+    let v = @v128.v128_bitselect(bt, v, @v128.i8x16_eq(v, bf))
+    @v128.v128_store(dst, i, v)
+    i = i + 16
+  }
+  while i < n {
+    let c = src[i]
+    dst[i] = if c == a_from { a_to } else if c == b_from { b_to } else { c }
+    i = i + 1
+  }
+}
+
+///|
+/// Encodes `bytes` as URL-safe base64 (RFC 4648 §5): `+`->`-`, `/`->`_`, and
+/// without `=` padding.
+pub fn encode_url(bytes : FixedArray[Byte]) -> FixedArray[Byte] {
+  let std = encode(bytes)
+  let mut n = std.length()
+  while n > 0 && std[n - 1] == b'=' {
+    n = n - 1
+  }
+  let out : FixedArray[Byte] = FixedArray::make(n, 0)
+  translate2(std, out, n, b'+', b'-', b'/', b'_')
+  out
+}
+
+///|
+/// Decodes URL-safe base64 (`-`->`+`, `_`->`/`); padding is optional. Returns
+/// `None` on any invalid character or length.
+pub fn decode_url(input : FixedArray[Byte]) -> FixedArray[Byte]? {
+  let len = input.length()
+  let translated : FixedArray[Byte] = FixedArray::make(len, 0)
+  translate2(input, translated, len, b'-', b'+', b'_', b'/')
+  decode(translated)
+}

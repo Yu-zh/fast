@@ -8,26 +8,45 @@ with a runnable example.
 
 ## Packages
 
-- `ascii` — ASCII classification (`all_ascii`, `find_non_ascii`,
-  `skip_whitespace`, `to_lower_ascii`).
+### Bytes & text
+
+- `ascii` — classification + case (`all_ascii`, `find_non_ascii`,
+  `skip_whitespace`, `to_lower_ascii`, `to_upper_ascii`, `eq_ignore_case`).
 - `hex` — lowercase hex `encode` / `decode`.
-- `base64` — standard (RFC 4648) base64 `encode` / `decode`.
+- `base64` — standard and URL-safe (RFC 4648) `encode` / `decode`.
+- `base32` — standard (RFC 4648) base32 `encode` / `decode`.
+- `charset` — arbitrary byte-set membership via a nibble-bitmap lookup.
 - `memchr` — single-byte search (`find_byte`, `find_last_byte`, `count_byte`).
-- `memmem` — substring search (`find`, `find_last`, `count`, `contains`) using
-  a first/last-byte probe with vectorized candidate filtering.
-- `atoi` — decimal integer parsing (`parse_uint64`, `parse_int64`) that folds
-  eight digits per step with a multiply-add chain.
-- `utf8` — UTF-8 validation and UTF-8 ⇆ UTF-16LE transcoding.
-- `json` — UTF-8 JSON parsing via a simdjson-style structural index pass, plus
-  `minify` and `escape_string` for the serialization side.
-- `escape` — web escaping (`html_escape`, `url_encode`) with a SIMD
-  no-escape fast path.
-- `csv` — RFC 4180 structural scanning (`unquoted_positions`,
-  `split_records`) using a quote-parity prefix-XOR.
-- `quicksort` — opt-in v128 quicksort for `Int` / `UInt` arrays, based on
+- `memmem` — substring search (`find`, `find_last`, `count`, `contains`).
+- `utf8` — UTF-8 validation, UTF-8 ⇆ UTF-16LE / Latin-1 transcoding, codepoint
+  counting.
+- `escape` — web escaping (`html_escape`, `url_encode`).
+- `json` — simdjson-style structural-index parsing, plus `minify` and
+  `escape_string`.
+- `csv` — RFC 4180 structural scanning via a quote-parity prefix-XOR.
+
+### Numbers
+
+- `atoi` — decimal integer parsing (`parse_uint64`, `parse_int64`).
+- `itoa` — decimal integer formatting (`format_uint64`, `format_int64`).
+- `ipv4` — IPv4 dotted-quad `parse` / `format`.
+
+### Numeric arrays
+
+- `quicksort` — opt-in v128 quicksort for `Int` / `UInt`, based on
   [Engineering Faster Sorters for Small Sets of Items](https://arxiv.org/pdf/2205.05982).
-- `reduce` — vectorized reductions over numeric arrays (`sum_int`, `min_int`,
-  `max_int`, `is_sorted_int`, and `Double` variants).
+- `reduce` — reductions (`sum`/`min`/`max`/`is_sorted`) over `Int` / `Double`.
+- `vecmath` — `dot`, `axpy`, `scale`, `argmin`, `argmax` over `Double`.
+- `prefix_sum` — inclusive scan (Hillis-Steele) over `Int`.
+
+### Checksums & hashing
+
+- `adler32` — Adler-32 checksum (SIMD widening adds + `dot`).
+- `crc32` — CRC-32/IEEE (table-based scalar; awaits a carryless-multiply
+  intrinsic for SIMD folding).
+- `sha256` — SHA-256 digest (scalar reference; awaits crypto intrinsics).
+- `histogram` — byte-frequency `counts` (scalar; scatter not in v128) and a
+  SIMD `count_of`.
 
 ## Examples
 

@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/vecmath"
+
+// Values
+pub fn argmax(FixedArray[Double]) -> Int?
+
+pub fn argmin(FixedArray[Double]) -> Int?
+
+pub fn axpy(Double, FixedArray[Double], FixedArray[Double]) -> Unit
+
+pub fn dot(FixedArray[Double], FixedArray[Double]) -> Double
+
+pub fn scale(Double, FixedArray[Double]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

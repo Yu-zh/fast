@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/itoa"
+
+// Values
+pub fn format_int(Int) -> FixedArray[Byte]
+
+pub fn format_int64(Int64) -> FixedArray[Byte]
+
+pub fn format_uint64(UInt64) -> FixedArray[Byte]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

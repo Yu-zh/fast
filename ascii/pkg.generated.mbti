@@ -4,11 +4,15 @@ package "Yu-zh/fast/ascii"
 // Values
 pub fn all_ascii(FixedArray[Byte]) -> Bool
 
+pub fn eq_ignore_case(FixedArray[Byte], FixedArray[Byte]) -> Bool
+
 pub fn find_non_ascii(FixedArray[Byte], from? : Int) -> Int?
 
 pub fn skip_whitespace(FixedArray[Byte], from? : Int) -> Int
 
 pub fn to_lower_ascii(FixedArray[Byte]) -> Unit
+
+pub fn to_upper_ascii(FixedArray[Byte]) -> Unit
 
 // Errors
 

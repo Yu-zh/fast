@@ -6,9 +6,15 @@ pub fn convert_utf16le_to_utf8(FixedArray[Byte]) -> FixedArray[Byte]?
 
 pub fn convert_utf8_to_utf16le(FixedArray[Byte]) -> FixedArray[Byte]?
 
+pub fn count_codepoints(FixedArray[Byte]) -> Int
+
+pub fn latin1_to_utf8(FixedArray[Byte]) -> FixedArray[Byte]
+
 pub fn utf16_length_from_utf8(FixedArray[Byte]) -> Int
 
 pub fn utf8_length_from_utf16le(FixedArray[Byte]) -> Int
+
+pub fn utf8_to_latin1(FixedArray[Byte]) -> FixedArray[Byte]?
 
 pub fn validate(FixedArray[Byte]) -> Bool
 

@@ -1,0 +1,14 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/sha256"
+
+// Values
+pub fn hash(FixedArray[Byte]) -> FixedArray[Byte]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -100,3 +100,71 @@ pub fn to_lower_ascii(bytes : FixedArray[Byte]) -> Unit {
     i = i + 1
   }
 }
+
+///|
+/// Converts ASCII lowercase letters to uppercase in place; all other bytes
+/// (including non-ASCII) are left unchanged.
+pub fn to_upper_ascii(bytes : FixedArray[Byte]) -> Unit {
+  let len = bytes.length()
+  let mut i = 0
+  let bias = @v128.i8x16_splat(b'a')
+  let range = @v128.i8x16_splat(26)
+  let case_bit = @v128.i8x16_splat(0x20)
+  while i + 16 <= len {
+    let chunk = @v128.v128_load(bytes, i)
+    // 'a' <= b <= 'z', then clear the 0x20 case bit on those lanes only
+    let lower = @v128.i8x16_lt_u(@v128.i8x16_sub(chunk, bias), range)
+    let uppered = @v128.v128_andnot(chunk, @v128.v128_and_(lower, case_bit))
+    @v128.v128_store(bytes, i, uppered)
+    i = i + 16
+  }
+  while i < len {
+    let b = bytes[i]
+    if b >= b'a' && b <= b'z' {
+      bytes[i] = b & 0xdf
+    }
+    i = i + 1
+  }
+}
+
+///|
+/// Folds an ASCII byte to lowercase for case-insensitive comparison: only
+/// 'A'-'Z' are shifted, every other byte (including non-ASCII) is unchanged.
+fn fold(v : V128) -> V128 {
+  let upper = @v128.i8x16_lt_u(
+    @v128.i8x16_sub(v, @v128.i8x16_splat(b'A')),
+    @v128.i8x16_splat(26),
+  )
+  @v128.v128_or_(v, @v128.v128_and_(upper, @v128.i8x16_splat(0x20)))
+}
+
+///|
+/// Returns whether `a` and `b` are equal ignoring ASCII letter case.
+pub fn eq_ignore_case(a : FixedArray[Byte], b : FixedArray[Byte]) -> Bool {
+  let len = a.length()
+  if len != b.length() {
+    return false
+  }
+  let mut i = 0
+  while i + 16 <= len {
+    let eq = @v128.i8x16_eq(
+      fold(@v128.v128_load(a, i)),
+      fold(@v128.v128_load(b, i)),
+    )
+    if @v128.i8x16_bitmask(eq) != 0xffff {
+      return false
+    }
+    i = i + 16
+  }
+  while i < len {
+    let x = a[i]
+    let y = b[i]
+    let fx = if x >= b'A' && x <= b'Z' { x | 0x20 } else { x }
+    let fy = if y >= b'A' && y <= b'Z' { y | 0x20 } else { y }
+    if fx != fy {
+      return false
+    }
+    i = i + 1
+  }
+  true
+}

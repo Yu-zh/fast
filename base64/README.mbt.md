@@ -7,7 +7,8 @@ blended by `v128_bitselect` (a stand-in for the `mulhi`/`mullo` that `v128`
 does not expose). Decoding processes 16 characters into 12 bytes using a
 perfect-hash classifier (high nibble → bucket) for ASCII→sextet plus a
 `dot`-based bit packer; it accepts input with or without `=` padding and
-returns `None` for invalid characters or lengths.
+returns `None` for invalid characters or lengths. `encode_url` / `decode_url`
+provide the URL-safe variant (RFC 4648 §5: `-`/`_`, no padding).
 
 ```mbt check
 ///|

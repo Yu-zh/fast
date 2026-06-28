@@ -1,0 +1,21 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/fast/charset"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct Charset {
+  lo : FixedArray[Byte]
+  hi : FixedArray[Byte]
+}
+pub fn Charset::contains(Self, Byte) -> Bool
+pub fn Charset::find_invalid(Self, FixedArray[Byte], from? : Int) -> Int?
+pub fn Charset::of(FixedArray[Byte]) -> Self
+pub fn Charset::validate(Self, FixedArray[Byte]) -> Bool
+
+// Type aliases
+
+// Traits
+

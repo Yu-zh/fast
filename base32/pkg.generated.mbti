@@ -1,14 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Yu-zh/fast/base64"
+package "Yu-zh/fast/base32"
 
 // Values
 pub fn decode(FixedArray[Byte]) -> FixedArray[Byte]?
 
-pub fn decode_url(FixedArray[Byte]) -> FixedArray[Byte]?
-
 pub fn encode(FixedArray[Byte]) -> FixedArray[Byte]
-
-pub fn encode_url(FixedArray[Byte]) -> FixedArray[Byte]
 
 // Errors
 
