@@ -1,0 +1,13 @@
+import {
+  "moonbitlang/core/builtin",
+}
+
+import {
+  "moonbitlang/core/bench",
+  "moonbitlang/core/test",
+  "Yu-zh/jq" @ourjq,
+  "shina1024/jqx",
+  "mizchi/jq" @mjq,
+} for "test"
+
+warnings = "-missing_doc-alert_experimental"

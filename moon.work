@@ -9,4 +9,5 @@ members = [
   "./application/jq",
   "./application/csvq",
   "./application/vision",
+  "./application/jqbench",
 ]
