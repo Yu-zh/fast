@@ -8,4 +8,5 @@ members = [
   "./application/dedup",
   "./application/jq",
   "./application/csvq",
+  "./application/vision",
 ]

@@ -1,0 +1,25 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yu-zh/vision"
+
+// Values
+pub fn center(FixedArray[Byte]) -> FixedArray[Byte]
+
+// Errors
+
+// Types and methods
+pub struct MLP {
+  w1 : FixedArray[Byte]
+  w2 : FixedArray[Byte]
+  in_dim : Int
+  hidden : Int
+  out_dim : Int
+  shift : Int
+}
+pub fn MLP::classify(Self, FixedArray[Byte]) -> Int
+pub fn MLP::logits(Self, FixedArray[Byte]) -> FixedArray[Int]
+pub fn MLP::new(FixedArray[Byte], FixedArray[Byte], Int, Int, Int, Int) -> Self
+
+// Type aliases
+
+// Traits
+
