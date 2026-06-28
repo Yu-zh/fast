@@ -37,7 +37,13 @@ fn expf(x : Float) -> Float {
 }
 
 ///|
-/// Dot product of `a[aoff..aoff+n]` and `b[boff..boff+n]` (f32x4).
+/// Dot product of `a[aoff..aoff+n]` and `b[boff..boff+n]`. This is ~90% of
+/// inference time, so it is tuned for the native backend: four independent
+/// accumulators break the floating-point add dependency chain (each `+` no
+/// longer waits on the previous one), which the out-of-order CPU then overlaps.
+/// A `v128` version was no faster here — `f32x4_const` built from runtime
+/// values costs as much as the vector add saves, since there is no vector load
+/// for typed arrays.
 fn dot(
   a : FixedArray[Float],
   aoff : Int,
@@ -45,25 +51,19 @@ fn dot(
   boff : Int,
   n : Int,
 ) -> Float {
-  let mut acc = @v128.f32x4_splat(0.0)
+  let mut s0 = (0.0 : Float)
+  let mut s1 = (0.0 : Float)
+  let mut s2 = (0.0 : Float)
+  let mut s3 = (0.0 : Float)
   let mut j = 0
   while j + 4 <= n {
-    let av = @v128.f32x4_const(
-      a[aoff + j],
-      a[aoff + j + 1],
-      a[aoff + j + 2],
-      a[aoff + j + 3],
-    )
-    let bv = @v128.f32x4_const(
-      b[boff + j],
-      b[boff + j + 1],
-      b[boff + j + 2],
-      b[boff + j + 3],
-    )
-    acc = @v128.f32x4_add(acc, @v128.f32x4_mul(av, bv))
+    s0 = s0 + a[aoff + j] * b[boff + j]
+    s1 = s1 + a[aoff + j + 1] * b[boff + j + 1]
+    s2 = s2 + a[aoff + j + 2] * b[boff + j + 2]
+    s3 = s3 + a[aoff + j + 3] * b[boff + j + 3]
     j = j + 4
   }
-  let mut s = hsum(acc)
+  let mut s = s0 + s1 + s2 + s3
   while j < n {
     s = s + a[aoff + j] * b[boff + j]
     j = j + 1

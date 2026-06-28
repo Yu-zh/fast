@@ -13,9 +13,10 @@ so the kernel library stays lean and independently published.
 curl -L -o stories15M.bin https://huggingface.co/karpathy/tinyllamas/resolve/main/stories15M.bin
 curl -L -o tokenizer.bin  https://github.com/karpathy/llama2.c/raw/master/tokenizer.bin
 
-# generate (native is required for speed — v128 lowers to real SIMD there)
+# generate — ALWAYS use --release on the native backend; a debug build is
+# ~100x slower (256 tokens: ~2.7s release vs ~5min debug).
 # args: <checkpoint> <tokenizer> [prompt] [steps] [temperature*100] [seed]
-moon run application/infer/cmd/main --target native -- \
+moon run application/infer/cmd/main --release --target native -- \
     stories15M.bin tokenizer.bin "Once upon a time" 256 0
 ```
 
@@ -44,12 +45,12 @@ Sample output (greedy, `temperature 0`):
 
 ## Status & caveats
 
-This is **correctness-first, not optimized**: the matmul gathers `f32x4` lanes
-element-by-element (there is no vector load for typed arrays) and isn't tiled or
-threaded, so generation is slow — expect minutes for a few hundred tokens of
-`stories15M` on native. Use a small step count for quick experiments. Natural
-next steps: faster matmul, 4-bit quantization for larger models, and richer
-sampling controls.
+With `--release` on native, `stories15M` runs at roughly **95 tokens/sec**
+(256 tokens in ~2.7s). A **debug build is ~100x slower**, so always pass
+`--release`. The matmul is single-threaded and, lacking a typed-array vector
+load, its `f32x4` gather performs about the same as scalar; the biggest levers
+from here are multi-threading and reduced memory traffic via int8/4-bit
+quantization (which also unlocks larger models).
 
 ```mbt check
 ///|
