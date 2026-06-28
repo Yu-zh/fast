@@ -118,8 +118,9 @@ load for `FixedArray[Int]` / `[Float]`, so a "SIMD" version must gather lanes
 one at a time with `*_const`, whose overhead outweighs the vector op. Earlier
 reduction and prefix-sum packages measured ~2–5× *slower* than a plain scalar
 loop, so they were dropped — every kernel here genuinely beats scalar. The lone
-numeric package, `quicksort`, wins on algorithm (≈6× faster than the stdlib
-sort), not on lane-wise SIMD.
+numeric package, `quicksort`, is opt-in: it uses v128 sorting networks for small
+runs and sorts ≈6× faster than the stdlib sort (the SIMD vs algorithmic share of
+that win isn't separately measured).
 
 Tests run on either backend (`moon test`, or `moon test --target native`).
 
